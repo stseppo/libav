@@ -125,6 +125,7 @@ void avcodec_register_all(void)
     REGISTER_ENCODER (H263P, h263p);
     REGISTER_DECODER (H264, h264);
     REGISTER_DECODER (H264_VDPAU, h264_vdpau);
+    REGISTER_DECODER (HEVC, hevc);
     REGISTER_ENCDEC  (HUFFYUV, huffyuv);
     REGISTER_DECODER (IDCIN, idcin);
     REGISTER_DECODER (IFF_BYTERUN1, iff_byterun1);

@@ -78,6 +78,8 @@ typedef struct ShortTermRPS {
 
 #define MAX_TB_SIZE 32
 #define MAX_CTB_SIZE 64
+#define MAX_QP 51
+#define DEFAULT_INTRA_TC_OFFSET 2
 
 typedef struct PTL {
     int general_profile_space;

@@ -568,6 +568,10 @@ typedef struct HEVCContext {
     int ctb_addr_ts; ///< CtbAddrTS
 
     uint8_t *split_coding_unit_flag;
+    uint8_t *horizontal_bs;
+    uint8_t *vertical_bs;
+    int bs_width;
+    int bs_height;
 
     CodingTree ct;
     CodingUnit cu;

@@ -922,33 +922,25 @@ static void hls_pcm_sample(HEVCContext *s, int x0, int y0, int log2_cb_size)
 
 static void hls_mvd_coding(HEVCContext *s, int x0, int y0, int log2_cb_size)
 {
+    int mvd_x = ff_hevc_abs_mvd_greater0_flag_decode(s);
+    int mvd_y = ff_hevc_abs_mvd_greater0_flag_decode(s);
 
-    int abs_mvd_greater0_flag[2];
-    int abs_mvd_greater1_flag[2] = { 0, 0 };
-    int abs_mvd_minus2[2];
-    int mvd_sign_flag[2];
-    int mvd_x;
-    int mvd_y;
-    abs_mvd_greater0_flag[0] = ff_hevc_abs_mvd_greater0_flag_decode(s);
-    abs_mvd_greater0_flag[1] = ff_hevc_abs_mvd_greater0_flag_decode(s);
-    if (abs_mvd_greater0_flag[0])
-        abs_mvd_greater1_flag[0] = ff_hevc_abs_mvd_greater1_flag_decode(s);
+    if(mvd_x)
+        mvd_x += ff_hevc_abs_mvd_greater1_flag_decode(s);
+    if(mvd_y)
+        mvd_y += ff_hevc_abs_mvd_greater1_flag_decode(s);
 
-    if (abs_mvd_greater0_flag[1])
-        abs_mvd_greater1_flag[1] = ff_hevc_abs_mvd_greater1_flag_decode(s);
+    if(mvd_x == 2)
+        mvd_x += ff_hevc_abs_mvd_minus2_decode(s);
+    if(mvd_x)
+        mvd_x *= (1 - (ff_hevc_mvd_sign_flag_decode(s) << 1));
 
-    if (abs_mvd_greater0_flag[0]) {
-        if (abs_mvd_greater1_flag[0])
-            abs_mvd_minus2[0] = ff_hevc_abs_mvd_minus2_decode(s);
-        mvd_sign_flag[0] = ff_hevc_mvd_sign_flag_decode(s);
-    }
-    if (abs_mvd_greater0_flag[1]) {
-        if (abs_mvd_greater1_flag[1])
-            abs_mvd_minus2[1] = ff_hevc_abs_mvd_minus2_decode(s);
-        mvd_sign_flag[1] = ff_hevc_mvd_sign_flag_decode(s);
-    }
-    mvd_x = abs_mvd_greater0_flag[0] * (abs_mvd_minus2[0] + 2) * (1 - (mvd_sign_flag[0] << 1));
-    mvd_y = abs_mvd_greater0_flag[1] * (abs_mvd_minus2[1] + 2) * (1 - (mvd_sign_flag[1] << 1));
+    if(mvd_y == 2)
+        mvd_y += ff_hevc_abs_mvd_minus2_decode(s);
+    if(mvd_y)
+        mvd_y *= (1 - (ff_hevc_mvd_sign_flag_decode(s) << 1));
+
+    av_dlog("block %d, %d motion vector diffs: %d , %d\n", x0, y0, mvd_x, mvd_y);
     return;
 }
 

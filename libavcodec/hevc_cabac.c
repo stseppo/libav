@@ -537,7 +537,7 @@ int ff_hevc_abs_mvd_greater0_flag_decode(HEVCContext *s)
 
 int ff_hevc_abs_mvd_greater1_flag_decode(HEVCContext *s)
 {
-    return GET_CABAC(elem_offset[ABS_MVD_GREATER1_FLAG]);
+    return GET_CABAC(elem_offset[ABS_MVD_GREATER0_FLAG] + 1);
 }
 
 int ff_hevc_abs_mvd_minus2_decode(HEVCContext *s)

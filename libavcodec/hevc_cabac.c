@@ -483,9 +483,11 @@ int ff_hevc_intra_chroma_pred_mode_decode(HEVCContext *s)
 
 int ff_hevc_merge_idx_decode(HEVCContext *s)
 {
-    int i = GET_CABAC(elem_offset[MERGE_IDX]);
+    int i = 1;
+    if(!GET_CABAC(elem_offset[MERGE_IDX]))
+        return 0;
 
-    while (i < s->sh.max_num_merge_cand-2 && get_cabac_bypass(&s->cc))
+    while (i < s->sh.max_num_merge_cand-1 && get_cabac_bypass(&s->cc))
         i++;
     return i;
 }
